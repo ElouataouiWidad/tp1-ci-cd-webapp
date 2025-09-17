@@ -1,0 +1,36 @@
+# Ce workflow se déclenche à chaque push ou pull request sur main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest   # runner GitHub Linux gratuit
+    steps:
+      # Étape 1 : récupérer le code du repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 : installer Node.js et npm
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Étape 3 : installer les dépendances (inclut Jest)
+      - name: Install dependencies
+        run: npm install
+
+      # Étape 4 : lint (optionnel, ignore erreurs avec || true)
+      - name: Run lint
+        run: npx eslint . || true
+
+      # Étape 5 : exécuter les tests unitaires Jest
+      - name: Run tests
+        run: npm test
+
+      # Étape 6 : build (copie du code vers dist/)
+      - name: Build project
+        run: npm run build
