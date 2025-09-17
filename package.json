@@ -1,7 +1,15 @@
+
 {
   "name": "tp1-ci-cd",
+  "version": "1.0.0",
+  "description": "Demo CI/CD Azure App Service with Jest",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Tests passed\""
+    "start": "node src/server.js",
+    "test": "jest --ci"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
+
