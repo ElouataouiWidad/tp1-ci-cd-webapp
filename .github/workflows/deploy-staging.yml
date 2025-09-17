@@ -1,0 +1,35 @@
+name: CD - Deploy to Staging
+
+# Déclenchement à chaque push sur main (après la CI)
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 — Récupérer le code source
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 — Configurer Node.js pour build (optionnel si déjà fait en CI)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Étape 3 — Installer les dépendances et build (comme en CI)
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+
+      # Étape 4 — Déployer sur Azure App Service (staging)
+      - name: Deploy to Azure WebApp (staging)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: webapp-staging-WE
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
+          package: .
