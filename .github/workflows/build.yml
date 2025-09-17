@@ -1,5 +1,6 @@
 name: CI - Build & Test
-# Ce workflow se déclenche à chaque push ou pull request sur main
+
+# Déclenchement à chaque push ou pull request sur main
 on:
   push:
     branches: [ main ]
@@ -8,30 +9,37 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest   # runner GitHub Linux gratuit
+    runs-on: ubuntu-latest   # Runner Linux gratuit
+
     steps:
-      # Étape 1 : récupérer le code du repo
+      # Étape 1 — Récupérer le code du dépôt
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Étape 2 : installer Node.js et npm
+      # Étape 2 — Installer Node.js et npm
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Étape 3 : installer les dépendances (inclut Jest)
+      # Étape 3 — Installer les dépendances (inclut Jest)
       - name: Install dependencies
         run: npm install
 
-      # Étape 4 : lint (optionnel, ignore erreurs avec || true)
+      # Étape 4 — Audit sécurité : bloque si vulnérabilités >= moderate
+      - name: Security audit
+        run: npm audit --audit-level=moderate
+
+      # Étape 5 — Lint (optionnel, n'échoue pas si eslint absent)
       - name: Run lint
         run: npx eslint . || true
 
-      # Étape 5 : exécuter les tests unitaires Jest
+      # Étape 6 — Lancer les tests unitaires Jest
       - name: Run tests
         run: npm test
 
-      # Étape 6 : build (copie du code vers dist/)
+      # Étape 7 — Build : copie du code vers dist/
       - name: Build project
         run: npm run build
+
+
