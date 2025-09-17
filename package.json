@@ -1,4 +1,3 @@
-
 {
   "name": "tp1-ci-cd",
   "version": "1.0.0",
@@ -6,10 +5,10 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "jest --ci"
+    "test": "jest --ci",
+    "build": "mkdir -p dist && cp -r src/* dist/"
   },
   "devDependencies": {
     "jest": "^29.7.0"
   }
 }
-
