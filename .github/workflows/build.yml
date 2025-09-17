@@ -26,6 +26,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+        # Étape 3 bis : audit de sécurité des dépendances
+      - name: Security audit (npm)
+        run: npm audit --audit-level=moderate
+
       # Étape 4 — Audit sécurité : bloque si vulnérabilités >= moderate
       - name: Security audit
         run: npm audit --audit-level=moderate
@@ -41,5 +45,6 @@ jobs:
       # Étape 7 — Build : copie du code vers dist/
       - name: Build project
         run: npm run build
+        
 
 
