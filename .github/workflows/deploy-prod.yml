@@ -1,0 +1,36 @@
+name: CD - Deploy to Production
+# On le déclenche manuellement quand staging est validé
+on:
+  workflow_dispatch:   # lancement manuel dans l’onglet Actions
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production   #  lié à l’environnement protégé
+
+    steps:
+      # Étape 1 — Récupérer le code source
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 — Configurer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Étape 3 — Installer et build
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+
+      # Étape 4 — Déployer vers Azure App Service (prod)
+      - name: Deploy to Azure WebApp (prod)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: webapp-prod-we
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
+          package: .
