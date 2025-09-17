@@ -1,3 +1,4 @@
+name: CI - Build & Test
 # Ce workflow se déclenche à chaque push ou pull request sur main
 on:
   push:
